@@ -1,6 +1,4 @@
-# keycloak-examples
-
-## SAML with keycloak
+# SAML with keycloak
 
 The project demonstrate a possible implementation of the SAML-Protocol with
 KeyCloak and spring-boot 3.1. 
@@ -8,9 +6,10 @@ KeyCloak and spring-boot 3.1.
 ### Start the example
 
 The whole example build and runs in docker-compose so the only thing
-you need to have on your development machine is __Docker__.
+you need to have on your development machine is __Docker__. It will use the 
+ports 8080 and 8081 for keycloak and spring-boot. This ports needs to be free.
 
-When you met this requirement you can clone this projrct into a local 
+When you met this requirement you can clone this project into a local 
 directory by:
 
 ```bash
@@ -60,3 +59,13 @@ _[Go to the protected site home.html](http://localhost:8081/home.html)_.
 
 This will delegate you to the KeyCloak login page, and you can log in with
 the user you created in the previous step.
+
+## Cleaning up
+
+When you finished with experimenting with keycloak use this commands to remove
+the containers from your docker:
+
+```bash
+docker-compose stop 
+docker-compose rm -f
+```

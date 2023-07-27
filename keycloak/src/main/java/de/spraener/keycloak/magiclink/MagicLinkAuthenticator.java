@@ -81,7 +81,11 @@ public class MagicLinkAuthenticator implements Authenticator {
     }
 
     private void displayMagicLinkSuccessPage(AuthenticationFlowContext context) {
-        //context.challenge(context.form().setInfo("magicLinkText").createInfoPage());
+        context.challenge(
+                context.form()
+                        .setInfo("magicLinkText")
+                        .createInfoPage()
+        );
     }
 
     @Override
