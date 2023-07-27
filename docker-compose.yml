@@ -1,8 +1,8 @@
 version: '3'
 
 services:
-  sg-keycloakdb:
-    container_name: "sg-keycloakdb"
+  cs-keycloakdb:
+    container_name: "cs-keycloakdb"
     image: mariadb:10.2
     environment:
       MYSQL_ROOT_PASSWORD: rootpwd
@@ -15,8 +15,8 @@ services:
       - "./sql/keycloakdb:/docker-entrypoint-initdb.d"
     command: mysqld --lower_case_table_names=1
 
-  sg-keycloak:
-    container_name: "sg-keycloak"
+  cs-keycloak:
+    container_name: "cs-keycloak"
     build:
       context: ./keycloak
       dockerfile: Dockerfile
@@ -28,8 +28,8 @@ services:
       - "8080:8080"
       - "8787:8787"
 
-  sg-saml-app:
-    container_name: "sg-saml-app"
+  cs-saml-app:
+    container_name: "cs-saml-app"
     build:
       context: ./saml-app
       dockerfile: Dockerfile
