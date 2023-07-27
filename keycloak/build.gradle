@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+}
+
+group='de.spraener.keycloak'
+version='1.0.0-SNAPSHOT'
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.keycloak:keycloak-core:21.1.1'
+    implementation 'org.keycloak:keycloak-server-spi:21.1.1'
+    implementation 'org.keycloak:keycloak-server-spi-private:21.1.1'
+    implementation 'org.keycloak:keycloak-services:21.1.1'
+}

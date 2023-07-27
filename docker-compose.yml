@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  sg-keycloakdb:
+    container_name: "sg-keycloakdb"
+    image: mariadb:10.2
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpwd
+      MYSQL_DATABASE: keycloakdb
+      MYSQL_USER: keycloak
+      MYSQL_PASSWORD: keycloakpwd
+    restart: on-failure
+    volumes:
+      - "./keycloakdb:/var/lib/mysql"
+      - "./sql/keycloakdb:/docker-entrypoint-initdb.d"
+    command: mysqld --lower_case_table_names=1
+
+  sg-keycloak:
+    container_name: "sg-keycloak"
+    build:
+      context: ./keycloak
+      dockerfile: Dockerfile
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin1
+    restart: always
+    ports:
+      - "8080:8080"
+      - "8787:8787"
+
+  sg-saml-app:
+    container_name: "sg-saml-app"
+    build:
+      context: ./saml-app
+      dockerfile: Dockerfile
+    restart: on-failure
+    environment:
+      - spring_profiles_active=docker
+    ports:
+      - "8081:8081"
