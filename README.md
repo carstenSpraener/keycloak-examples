@@ -52,13 +52,18 @@ http://localhost:8080/admin/master/console/
 
 Select the __SAML-IDP-Test__ realm and create a test user as you like.
 
-## Login to the application
+## Log in to the application
 
 Open the saml-app und the url: http://localhost:8081/ and click on the
 _[Go to the protected site home.html](http://localhost:8081/home.html)_. 
 
 This will delegate you to the KeyCloak login page, and you can log in with
 the user you created in the previous step.
+
+
+## MagicLink set up
+
+[MagicLink-Integration.md](keycloak%2Fdoc%2FMagicLink-Integration.md)
 
 ## Cleaning up
 
