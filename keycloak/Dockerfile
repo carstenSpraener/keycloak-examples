@@ -2,12 +2,14 @@ FROM gradle:jdk17-focal as extension-build
 
 WORKDIR /extension-build
 
-COPY src ./src/
-COPY build.gradle ./
+COPY extensions/magic-link ./magic-link
+COPY extensions/rest-demo ./rest-demo
+COPY extensions/settings.gradle ./settings.gradle
+RUN gradle jar
 
-RUN gradle --no-daemon jar
+RUN ls -l
 
-FROM quay.io/keycloak/keycloak:latest as builder
+FROM quay.io/keycloak/keycloak:22.0.1
 
 # Enable health and metrics support
 ENV KC_HEALTH_ENABLED=true
@@ -19,7 +21,8 @@ ENV KC_HOSTNAME_PATH=/kc-auth
 
 WORKDIR /opt/keycloak
 
-COPY --from=extension-build /extension-build/build/libs/*.jar /opt/keycloak/providers
+COPY --from=extension-build /extension-build/magic-link/build/libs/*.jar /opt/keycloak/providers
+COPY --from=extension-build /extension-build/rest-demo/build/libs/*.jar /opt/keycloak/providers
 RUN mkdir /opt/keycloak/data/import
 
 COPY ./saml-idp-test-realm.json /opt/keycloak/data/import/

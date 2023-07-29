@@ -21,8 +21,8 @@ gradle-app.setting
 .classpath
 .DS_Store
 
-/gradlew.bat
-/gradlew
-/gradle/
-/.idea/
-/.gradle/
+**/gradlew.bat
+**/gradlew
+**/gradle/
+**/.idea/
+**/.gradle/

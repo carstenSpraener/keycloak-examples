@@ -9,6 +9,7 @@ import org.keycloak.email.EmailTemplateProvider;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
+import org.keycloak.models.UserProvider;
 import org.keycloak.models.utils.KeycloakModelUtils;
 
 import java.util.HashMap;
@@ -37,21 +38,30 @@ public class MagicLinkAuthenticator implements Authenticator {
             } else {
                 displayMagicLinkSuccessPage(context);
             }
+        } else if( isOneTimeLink(context) ) {
+            String userID = context.getHttpRequest().getUri().getQueryParameters().getFirst("cs-user");
+            UserProvider up = context.getSession().getProvider(UserProvider.class);
+            UserModel userModel = up.getUserByEmail(context.getRealm(), userID);
+            context.setUser(userModel);
+            context.success();
         } else {
             sendMagicLink(context);
         }
     }
 
+    private boolean isOneTimeLink(AuthenticationFlowContext context) {
+        return context.getHttpRequest().getUri().getQueryParameters().getFirst("cs-user")!= null;
+    }
+
     @Override
     public void action(AuthenticationFlowContext context) {
+        LOGGER.info("MagicLinkAuthenticator.action("+context+")");
     }
 
     private void sendMagicLink(AuthenticationFlowContext context) {
         RealmModel realm = context.getRealm();
         UserModel user = context.getUser();
         if (user == null) {
-            // if user is null, we don't want to allow for username guessing
-            // so, we just say it's all ok and stop here
             displayMagicLinkSuccessPage(context);
             return;
         }
@@ -90,7 +100,7 @@ public class MagicLinkAuthenticator implements Authenticator {
 
     @Override
     public boolean requiresUser() {
-        return true;
+        return false;
     }
 
     @Override

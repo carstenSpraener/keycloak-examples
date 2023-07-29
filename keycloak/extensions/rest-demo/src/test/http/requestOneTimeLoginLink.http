@@ -1,0 +1,13 @@
+GET http://localhost:8080/realms/master/rest-demo/hello
+
+###
+
+POST http://localhost:8080/realms/SAML-IDP-Test/rest-demo/link
+Content-Type: application/json
+
+{
+  "userEmail" : "carsten@spraener.de",
+  "clientID": "http://localhost:8081/saml2/service-provider-metadata/saml-app"
+}
+
+###
