@@ -126,12 +126,11 @@ command:
 openssl req -newkey rsa:2048 -nodes -keyout rp-key.key -x509 -days 365 -out rp-certificate.crt
 ```
 This command will create two files, `rp-key.key` and `rp-certificate.key`. These are the credentials that the spring boot application will use to sign
-messages for KeyCloak.
+messages for KeyCloak. They are valid for 365 days.
 
-Now open the `application.yaml` file and configure these two files
-there, so we can easily refer them from the application:
+Now open the `application.yaml` file and configure these two files  there, so we can easily refer them from the application:
 
-```yaml
+```yam
 saml2:
   rp:
     signing:
@@ -156,7 +155,7 @@ private String rpSigningKeyLocation;
 #### KeyCloak-Certificate
 The third certificate needed is the KeyCloak signing certificate that
 the application needs to verify that the message is coming from
-KeyCloak. To get the certificate to go to the KeyCloak administration site,
+KeyCloak. To get the certificate, go to the KeyCloak administration site,
 make sure you selected the right Realm, and then go to _Realm Setting_
 and open the _Keys_ Tab. The correct certificate is the RSH256 with
 Use "SIG". Click on the marked _Certificate_ button:
@@ -233,6 +232,11 @@ As mentioned above, we need to create and configure a RelyingPartyRegistrationRe
 So there needs to be a second method that creates this repository:
 
 ```java
+@Value("${saml2.ap.metadata.location}")
+private String metadataLocation;
+
+...
+
 @Bean
 public RelyingPartyRegistrationRepository relyingPartyRegistrations() throws Exception {
     Resource signingCertResource = new ClassPathResource(this.rpSigningCertLocation);
@@ -276,7 +280,7 @@ final Saml2X509Credential rpSigningCredentials = Saml2X509Credential.signing(rpK
 ```
 
 __Detail!__ To use the certificate and key for signing, you have to
-create the credential with the `Saml2X509Credential.singning()` method.
+create the credential with the Saml2X509Credential.__singning()__ method.
 
 To create the assertion party verification credentials, we have to get the
 certificate from the application.yaml, decode it to an X509 certificate, and
@@ -288,7 +292,7 @@ Saml2X509Credential apCredential = Saml2X509Credential.verification(apCert);
 ```
 
 __Detail!__ To create a signing verification credential object,
-you have to call the `Saml2X509Credential.verification()` method!
+you have to call the Saml2X509Credential.__verification()__ method!
 
 __Don't mix up the singing and verification methods of the Saml2X509Credential class.
 That costs me some time to debug.__
@@ -333,7 +337,7 @@ saml2:
 ```
 
 With this link stored in the variable `metadataLocation` we can now start and create
-the `RelyingPartyRegistration` by using __ATTENTION__ `RelyingPartyRegistrations` (plural)
+the `RelyingPartyRegistration` by using __ATTENTION__ `RelyingPartyRegistrations` __(plural)__
 to build the desired instance.
 
 You have to set the following values:
